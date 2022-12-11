@@ -1,0 +1,27 @@
+﻿@page "/counter"
+@*@attribute [Authorize(Roles="Iron Man2")]*@
+@attribute [Authorize]
+<PageTitle>Counter</PageTitle>
+
+<h1>Counter</h1>
+
+<p role="status">Current count: @currentCount</p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+<AuthorizeView>
+    <Authorized>
+        <span>Do you see this if you are authorization as @context.User.Identity.Name</span>
+    </Authorized>
+    <NotAuthorized>
+        <span>Do you see this if you are not authorization</span>
+        </NotAuthorized>
+</AuthorizeView>
+@code {
+    private int currentCount = 0;
+
+    private void IncrementCount()
+    {
+        currentCount++;
+    }
+}
+

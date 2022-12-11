@@ -1,0 +1,26 @@
+﻿@page "/login"
+@using EDSystems.WebApp.Models;
+@inject HttpClient httpClient
+@inject AuthenticationStateProvider authenticationStateProvider
+@inject ILocalStorageService localStorageService
+<h3>Login</h3>
+
+<EditForm Model="user" OnSubmit="HandleLogin">
+    <label for="username">Name</label>
+    <InputText @bind-Value="user.Email" />
+    <label for="password">Password</label>
+    <InputText @bind-Value="user.Password" />
+    <button type="submit" class="button btn-primary">Do It</button>
+</EditForm>
+
+@code {
+    UserLoginDto user = new UserLoginDto();
+    async Task HandleLogin()
+    {
+        //https:localhost:44353/api/Authentication/Login
+        var result = await httpClient.PostAsJsonAsync("api/Authentication/Login", user);
+        var token = await result.Content.ReadAsStringAsync();
+        await localStorageService.SetItemAsync("token", token);
+        await authenticationStateProvider.GetAuthenticationStateAsync();
+    }
+}
